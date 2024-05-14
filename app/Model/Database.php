@@ -21,12 +21,32 @@ class Database
     }
   }
 
-  public function select($query = "" , $params = [])
+  public function select($query = "")
   {
     try {
       $result = pg_query($this->connection, $query);
       $arr = pg_fetch_all($result);
       return $arr;
+    }
+    catch(Exception $e) {
+      throw New Exception( $e->getMessage() );
+    }
+    return false;
+  }
+
+  public function insert($query = "")
+  {
+    try {
+      $products_data = [];
+      foreach ($query as $dataset) {
+        $products_data[] = "'" . $dataset['title'] . "', " . $dataset['price'];
+      }
+      $products_data_raw = implode('), (', $products_data);
+      $query = "
+        INSERT INTO products (title, price)
+        VALUES (" . $products_data_raw . ");";
+      $result = pg_query($this->connection, $query);
+      return $result;
     }
     catch(Exception $e) {
       throw New Exception( $e->getMessage() );

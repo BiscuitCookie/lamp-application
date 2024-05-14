@@ -15,6 +15,6 @@ class UserModel extends Database
       LEFT JOIN products p
       ON uo.product_id = p.id
       WHERE u.id IN ({$ids})
-      ORDER BY full_name, p.title DESC, p.price DESC;");
+      ORDER BY full_name, p.title ASC, p.price DESC;");
   }
 }
